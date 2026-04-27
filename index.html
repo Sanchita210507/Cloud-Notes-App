@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cloud Notes</title>
+</head>
+<body>
+
+<h2>Cloud Notes App</h2>
+
+<input type="text" id="noteInput" placeholder="Enter note">
+<button onclick="saveNote()">Save</button>
+
+<ul id="notesList"></ul>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD5Q6OeoDXA0pW1__16mT5bLmvdRqt2_dQ",
+  authDomain: "cloud-notes-app-59d1b.firebaseapp.com",
+  databaseURL: "https://cloud-notes-app-59d1b-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "cloud-notes-app-59d1b",
+  storageBucket: "cloud-notes-app-59d1b.firebasestorage.app",
+  messagingSenderId: "636204312036",
+  appId: "1:636204312036:web:ea03a67e961709e34ed3f1"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database().ref("notes");
+
+function saveNote() {
+  const note = document.getElementById("noteInput").value;
+  db.push(note);
+  document.getElementById("noteInput").value = "";
+}
+
+db.on("value", snapshot => {
+  const list = document.getElementById("notesList");
+  list.innerHTML = "";
+  snapshot.forEach(child => {
+    const li = document.createElement("li");
+    li.innerText = child.val();
+    list.appendChild(li);
+  });
+});
+</script>
+
+</body>
+</html>
